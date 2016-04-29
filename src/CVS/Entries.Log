@@ -1,0 +1,13 @@
+A D/OS_X////
+A D/base////
+A D/build_os_x_ppc////
+A D/build_win32_visual_studio_2005////
+A D/build_win32_visual_studio_2008////
+A D/build_win32_visual_studio_6.0////
+A D/build_win64_visual_studio_2008////
+A D/gui////
+A D/vms////
+A D/windows////
+R D/windows////
+R D/vms////
+R D/build_win32_visual_studio_6.0////

@@ -1,0 +1,652 @@
+/**
+\page changelog Changelog
+
+\section c019 version 0.18 -> 0.18+
+
+ - New BREAKPOINT READ, WRITE and ACCESS commands in the debugger allow breakpoint to be set
+   on data access. (12-jun-2008, Camiel Vanderhoeven)
+ - Support for SRM/DPR mechanism for starting secondary CPUs. Not working correctly, although
+   we seem to be on to something. (12-jun-2008, Camiel Vanderhoeven)
+ - Fixed unaligned memory access handling.  (12-jun-2008, Camiel Vanderhoeven)
+ - Fixed compilation on Fedora 9 / gcc 4.3.0, and probably other configurations as well.
+   (12-jun-2008, Caolan McNamara)
+ - Removed dependency on Poco by including parts of it. (31-may-2008, Camiel Vanderhoeven)
+ - Fixed a bug in the SDL configuration script (checking for "true" rather than "yes" in the
+   final test). (09-may-2008, Caolán McNamarra)
+ - Floppy controller implementation. (29-apr-2008, Brian Wheeler)
+ - CDiskController is no longer a CPCIDevice. This alows for non-PCI diskcontrollers (like the
+   floppy controller. (29-apr-2008, Camiel Vanderhoeven)
+ - Added memory map dumping and memory range checking. (29-apr-2008, Brian Wheeler)
+ - Rewrote DMA code to make it ready for floppy support. (18-apr-2008, Brian Wheeler)
+ - More questions in debug confuration script. (03-apr-2008, Camiel Vanderhoeven)
+ - Improved support for SDL on OS-X. (10-apr-2008, Martin Borgman)
+ - Compile on OpenVMS; new OpenVMS build scripts generated from the UNIX build scripts; Include
+   selected parts of Poco (Poco has dropped support for OpenVMS). (02-apr-2008, Camiel
+   Vanderhoeven)
+ - Created configuration file utility. (28-mar-2008, Camiel Vanderhoeven)
+ - Support OpenVMS file paths. (26-mar-2008, Camiel Vanderhoeven)
+ - Use the config.h data created by the configure script. (26-mar-2008, Camiel Vanderhoeven)
+ - Improved IDE locking by a) Removing all of the general register locking; b) Busmaster locking
+   is still in place, but it might not be needed, this locking is pretty fine grained so nothing
+   should time out waiting for it; c) Creating an alt_status variable which gets updated when the
+   real status becomes stable (i.e. at the end of the execute() run, after the drq status is
+   changed, etc), access to this variable is locked; d) Everything else is a free for all.
+   (20-mar-2008, Brian Wheeler)
+ - Implement an optional delayed IDE interrupt. The OSes still lose interrupts sometimes. 
+   (20-mar-2008, Brian Wheeler)
+ - Create configuration files to use GNU's Autotools. (20-mar-2008, Camiel Vanderhoeven)
+ - Support disk image files >2GB on linux. (19-mar-2008, Camiel Vanderhoeven)
+ - Fixed some IDE CD-ROM issues that were introduced with the multi-threading patch. (17-mar-2008,
+   Brian Wheeler)
+ - Restored SDL functionality. (16-mar-2008, Camiel Vanderhoeven)
+ - Better exception handling, restored Serial port menu functionality (14-mar-2008, Camiel
+   Vanderhoeven)
+ - Ability to stop and restart threads, restored save/restore state functionality. (13-mar-2008, 
+   Camiel Vanderhoeven)
+ - Use separate threads for devices rather than crowding everything into one thread. Use Poco 
+   libraries for platform independent threading. NOTE: This patch breaks some functionality that 
+   we will need to regain in the future. (05-mar-2008, Camiel Vanderhoeven)
+ .
+ 
+\section c018 version 0.17 -> 0.18
+
+Version 0.18 contains a lot of compatibility fixes, both with host and guest operating systems.
+
+ - Merged Brian wheeler's New IDE code into the standard controller. NewIde class has disappeared.
+   (04-mar-2008, Camiel Vanderhoeven)
+ - Support some basic MP features. (CPUID read from C-Chip MISC register, inter-processor
+   interrupts) (04-mar-2008, Camiel Vanderhoeven)
+ - Allow memory sizes over 1 GB. (02-mar-2008, Brian Wheeler)
+ - Natural way to specify large numeric values ("10M") in the config file. (02-mar-2008, Camiel 
+   Vanderhoeven)
+ - Add BREAKPOINT INSTRUCTION command to IDB. (29-feb-2008, Brian Wheeler)
+ - Restart serial port connection if lost. (29-feb-2008, Brian Wheeler)
+ - Fix RMC reported psu and temperature status. (29-feb-2008, Brian Wheeler)
+ - Compute SROM checksum for network interface. Tru64 needs this. (29-feb-2008, Brian Wheeler)
+ - Fix vms boot problems from ide cdrom and make Tru64 installation possible by: a) Clearing the 
+   busmaster active bit when the bit 1 is written to the busmaster status register; and b) 
+   Attempting to refire the interrupt if the driver seems to have missed it. (27-feb-2008, Brian 
+   Wheeler)
+ - Major rewrite of NIC code. Real internal loopback support, ring queue for incoming packets, and
+   various other improvements. (26-feb-2008, David Hittner)
+ - Improvements to backtrace functionality on GNU systems (26-feb-2008, Brian Wheeler)
+ - Better config file syntax checking and error reporting. (26-feb-2008, Brian Wheeler)
+ - Moved DMA code into it's own class (CDMA). (26-feb-2008, Camiel Vanderhoeven)
+ - Shut down display refresh thread when emulator exits. (20-feb-2008, David Leonard)
+ - Return SYSTEM RESOURCE FAILURE sense if dato/dati buffer size is exceeded in SCSI operations.
+   (20-feb-2008, David Leonard)
+ - Support MSF in READ TOC scsi command. (20-feb-2008, Brian Wheeler)
+ - Show disk creation progress. (20-feb-2008, David Leonard)
+ - Avoid 'Xlib: unexpected async reply' errors on Linux/Unix/BSD's by adding some thread
+   interlocking. (20-feb-2008, David Leonard)
+ - GNU compiler support on Windows. (20-feb-2008, Alex)
+ - HCI register space for UISB added. (18-feb-2008, Brian Wheeler)
+ - Added vital product data page 0 (Required for Tru64). (18-feb-2008, Brian Wheeler)
+ - The READ CAPACITY scsi command now properly returns the number of the last LBA (n-1); not the 
+   number of LBA's (n). INITIALIZE now works properly on a scsi disk. (18-feb-2008, Camiel
+   Vanderhoeven)
+ - Added READ_LONG scsi command, and support for MODE_SENSE changeable parameter pages. (last bit
+   needed to get SCSI working on OpenVMS) (16-feb-2008, Camiel Vanderhoeven)
+ - The owner of the SCSI bus is allowed to re-arbitrate for it. (16-feb-2008, Camiel Vanderhoeven)
+ - Added Symbios 53C810 SCSI controller. (16-feb-2008, Camiel Vanderhoeven)
+ - Moved keyboard code into it's own class. (CKeyboard). (12-feb-2008, Camiel Vanderhoeven)
+ - Show originating device name on memory errors. (08-feb-2008, Camiel Vanderhoeven)
+ - Set default keyboard translation to scanset 3 (PS/2). (08-feb-2008, Camiel Vanderhoeven)
+ - On GNU systems, display a backtrace when a segmentation fault occurs, and DEBUG_BACKTRACE has
+   been defined. (07-feb-2008, Brian Wheeler)
+ - Fixed registration of ROM expansion address. (06-feb-2008, Camiel Vanderhoeven)
+ - Check for FPEN in old floating point code. (06-feb-2008, Camiel Vanderhoeven)
+ - Proper interrupt handling in serial port device. Fixes an initialization bug spotted by David 
+   Hittner. (06-feb-2008, Camiel Vanderhoeven)
+ - Disable unaligned access check alltogether; it doesn't work properly for some reason. 
+   (05-feb-2008, Camiel Vanderhoeven)
+ - The new floating point code (21-jan-2008) has some unidentified problems. The OpenVMS 
+   installation routine fails with this new code. For now, the old floating point code has been 
+   restored, and the new floating-point code is used only when HAVE_NEW_FP has been defined. The
+   new code should be fixed, so we can take advantage of floating point exceptions. (05-feb-2008,
+   Camiel Vanderhoeven)
+ - Display a message when system initialization has failed. (05-feb-2008, Brian Wheeler)
+ - Put X64 around 64-bit constants in DO_CVTQL. (compilation issue on some Linux'es) (05-feb-2008,
+   Camiel Vanderhoeven)
+ - Corrected a typo in the definition of PCI_PTE_SHIFT (2 should be 12) that caused an OpenVMS 
+   procgone bugcheck. (04-feb-2008, Camiel Vanderhoeven)
+ - Completed LPT support so it works with FreeBSD as a guest OS. (02-feb-2008, Brian Wheeler)
+ - Avoid unnecessary shift-operations to calculate constant values. (01-feb-2008, Camiel
+   Vanderhoeven)
+ - Improved speed by remembering the number of instructions left in current memory page, so that 
+   the translation-buffer doens't need to be consulted on every instruction fetch when the Icache
+   is disabled. (30-jan-2008, Camiel Vanderhoeven)
+ - Remember separate last found translation-buffer entries for read and write operations. This 
+   should help with memory copy operations. (29-jan-2008, Camiel Vanderhoeven)
+ - Avoid interrupts from the new IDE device that originated while interrupts were disabled. 
+   (29-jan-2008, Brian Wheeler)
+ - Improved floating-point exception handling. (28-jan-2008, Camiel Vanderhoeven)
+ - Lifted hardcoded file-size limit of 10,000 bytes for config file. (26-jan-2008, Camiel
+   Vanderhoeven)
+ - Bugfix in the VAX floating point STF and the IEEE floating point STS instructions. 
+   (26-jan-2008, Camiel Vanderhoeven)
+ - Don't repeat interrupts from the new IDE controller too soon. (26-jan-2008, Brian Wheeler)
+ - Do unaligned trap only when a page boundary is crossed. Something is causing alignment traps in
+   the SRM console, with the DAT bit set to false, and no OS handler in place. Also, when OpenVMS
+   boots there are alignment traps that shouldn't happen. None of these cross page boundaries, so
+   we're safe for now. (26-jan-2008, Camiel Vanderhoeven)
+ - Trap on unaligned memory access. The previous implementation where unaligned accesses were
+   silently allowed could go wrong when page boundaries are crossed. (25-jan-2008, Camiel 
+   Vanderhoeven)
+ - Allow specifying autocreate_size on a disk image to have it created if it doesn't exist. 
+   (25-jan-2008, Camiel Vanderhoeven)
+ - Added an option to disable the processor Icache. The emulator runs faster when this is
+   disabled, but that might lead to problems with some OS'es. (25-jan-2008, Camiel Vanderhoeven)
+ - Added do_pci_write and do_pci_read functions to the PCI base device. (24-jan-2008, Camiel
+   Vanderhoeven, David Hittner)
+ - Fixed overflow-detection. (24-jan-2008, Camiel Vanderhoeven)
+ - Added missing integer /V instructions (22-jan-2008, Camiel Vanderhoeven, Bob Supnik)
+ - win32 GUI made compatible with older windows SDK. (22-jan-2008, Camiel Vanderhoeven)
+ - New floating-point code (21-jan-2008, Camiel Vanderhoeven, Bob Supnik)
+ - Fixed misinterpretation of the INT bit in integer overflow traps. (21-jan-2008, Camiel
+   Vanderhoeven)
+ - Limited the maximum number of sectors, as the OpenVMS IDE driver doesn't like 255 sectors.
+   (Camiel Vanderhoeven, 21-jan-2008)
+ - Added X11 GUI. (20-jan-2008, Camiel Vanderhoeven)
+ - Added win32 GUI. (19-jan-2008, Camiel Vanderhoeven)
+ - Run CPU in a separate thread if CPU_THREADS is defined. NOTA BENE: This is very experimental,
+   and has several problems. (19-jan-2008, Camiel Vanderhoeven)
+ - Replaced sext_64 inlines for performance reasons (18-jan-2008, Camiel Vanderhoeven, David
+   Hittner)
+ - Process device interrupts after a 100-cpu-cycle delay. (18-jan-2008, Camiel Vanderhoeven)
+ - Added ADDL/V instruction (16-jan-2008, David Hittner, Bob Supnik)
+ - Fixed some timeouts on new IDE controller. (16-jan-2008, Brian Wheeler)
+ - When a keyboard self-test command is received, and the queue is not empty, the queue is cleared
+   so the 0x55 that's sent back will be the first thing in line. Makes the keyboard initialize a
+   little better with SRM. (15-jan-2008, Brian Wheeler)
+ - Bugfix regarding double deletion of disk device objects. (13-jan-2008, Brian Wheeler)
+ - New IDE-controller working on big-endian host architectures. (13-jan-2008, Fang Zhe)
+ - Support additional CD-ROM commands. (13-jan-2008, Brian Wheeler)
+ - Smart algorithm for determining optimal cylinder/head/sector disk layout. (13-jan-2008, Camiel
+   Vanderhoeven)
+ - End debugger run on Ctrl-C. (12-jan-2008, Brian Wheeler)
+ - SCSI Engine added to Disk class. SCSIBus class and SCSIDevice base class added. (12-jan-2008,
+   Camiel Vanderhoeven)
+ - bugfix to ATAPI code in new IDE controller. SRM can now boot from IDE CD-ROMs. (09-jan-2008,
+   Brian wheeler)
+ - ATAPI improvements to new IDE controller. (09-jan-2008, Brian wheeler)
+ - Put filename without path in disk model number. (09-jan-2008, Brian Wheeler)
+ - Save disk state to state file. (09-jan-2008, Camiel Vanderhoeven)
+ - Use Brian Wheeler's CNewIde class instead of the CAliM1543C_ide class if HAVE_NEW_IDE is
+   defined. This change will be undone when the new ide controller will replace the old standard
+   one. (08-jan-2008, Camiel Vanderhoeven)
+ - "Old" IDE-controller working on big-endian host architectures. (08-jan-2008, Fang Zhe)
+ - S3 Trio VGA-card working on big-endian host architectures. (08-jan-2008, Fang Zhe)
+ - Removed last references to IDE disk read SRM replacement. (08-jan-2008, Camiel Vanderhoeven)
+ - Added NewIde class. Due to replace the current IDE controller implementation. (08-jan-2008, 
+   Brian Wheeler)
+ - PCI scatter/gather DMA memory mapping support added. (07-jan-2008, Camiel Vanderhoeven)
+ - Default blocksize set to 2048 bytes for CD-ROM devices. (06-jan-2008, Camiel Vanderhoeven)
+ - Allow changing block-size on disk devices. (06-jan-2008, Camiel Vanderhoeven)
+ - Fixed typo in network-code (05-jan-2008, Fausto Saporito)
+ - Do 64-bit file I/O properly for FreeBSD and OS X. (05-jan-2008, Fang Zhe)
+ - Added CDiskDevice class to allow using raw devices. (05-jan-2008, Camiel Vanderhoeven)
+ - Made MAC-address of network-card configurable (04-jan-2008, David Hittner)
+ - Make telnet work on Apple OS X. (04-jan-2008, Fang Zhe)
+ - Improved compatibility with SDL on Apple OS X (including keyboard). (04-jan-2008, Fang Zhe)
+ - Added swap_xx macro's for use in places where bytes need to be swapped regardless of endianess.
+   (04-jan-2008, Camiel Vanderhoeven)
+ - Support for larger disk images by using 64-bit file I/O. (04-jan-2008, Camiel Vanderhoeven)
+ - Cirrus VGA-card working on big-endian host architectures. (03-jan-2008, Camiel Vanderhoeven)
+ - PCI base device working on big-endian host architectures. (03-jan-2008, Camiel Vanderhoeven)
+ - Compatibility with SDL on Apple OS X. (03-jan-2008, Fang Zhe)
+ - Compileable on Apple OS X and FreeBSD. (03-jan-2008, Fang Zhe)
+ - CPU working on big-endian host architectures. (02-jan-2008, Camiel Vanderhoeven)
+ - Recognize endianess on more architectures. (02-jan-2008, Fang Zhe)
+ .
+
+\section c017 version 0.16 -> 0.17
+
+Version 0.17 adds VGA and SCSI support. The configuration file format has changed.
+
+ - Ignore loopback mode on network card. (02-jan-2008, Camiel Vanderhoeven)
+ - Fixed memory leaks. (29-dec-2007, Camiel Vanderhoeven)
+ - Throw exceptions rather than just exiting when errors occur. (28-dec-2007, Camiel Vanderhoeven)
+ - Only delay IDE interrupts when NO_VMS is defined. (Need to fix this properly) (28-dec-2007,
+   Camiel Vanderhoeven)
+ - Close files and free memory when shutting down. (20-dec-2007, Camiel Vanderhoeven)
+ - Do SCSI reselection on read commands. (20-dec-2007, Camiel Vanderhoeven)
+ - More checks if IDE disks exist. (20-dec-2007, Camiel Vanderhoeven)
+ - Basic ATAPI support added. (19-dec-2007, Brian Wheeler)
+ - Allow for different block sizes for SCSI disks. (19-dec-2007, Camiel Vanderhoeven)
+ - Allow for reporting disk-size in bytes. (19-dec-2007, Camiel Vanderhoeven)
+ - Faster IEEE floating-point operations on machines that support IEEE. (18-dec-2007, Camiel
+   Vanderhoeven)
+ - Fixed silly mis-interpretation of "add-with-carry" instruction on SCSI controller. 
+   (18-dec-2007, Camiel Vanderhoeven)
+ - Byte-sized disk transfers for SCSI controller. (18-dec-2007, Camiel Vanderhoeven)
+ - Bugfix in disk-controller initialization. (18-dec-2007, Camiel Vanderhoeven)
+ - SCSI timeout delayed until phase check. (18-dec-2007, Camiel Vanderhoeven)
+ - General timer added to SCSI controller. (17-dec-2007, Camiel Vanderhoeven)
+ - Format of state file changed to allow better error-checking. (17-dec-2007, Camiel Vanderhoeven)
+ - Changed last disk cylinder number calculation. (17-dec-2007, Brian Wheeler)
+ - Better DMA support. (17-dec-2007, Brian Wheeler)
+ - Delayed IDE interrupts. (NetBSD requirement) (17-dec-2007, Brian Wheeler)
+ - Added menu option to load state file to the serial port BREAK menu. (16-dec-2007, Camiel
+   Vanderhoeven)
+ - Register structure changed for SCSI card. (16-dec-2007, Camiel Vanderhoeven)
+ - Corrected some weird uses of size_t. (16-dec-2007, Brian Wheeler)
+ - disabled out SRM IDE READ replacement; doesn't work with SCSI! (14-dec-2007, Camiel
+   Vanderhoeven)
+ - Symbios SCSI controller (CSym53C895) added. (14-dec-2007, Camiel Vanderhoeven)
+ - Free RAMdisk memory on destruction. (14-dec-2007, Camiel Vanderhoeven)
+ - Use disk base class for direct IDE access from SRM. (12-dec-2007, Camiel Vanderhoeven)
+ - Move disk operations to a separate CDisk base class, and it's descendent CDiskFile and CDiskRam
+   classes. (12-dec-2007, Camiel Vanderhoeven)
+ - Add a CDiskController base class. (12-dec-2007, Camiel Vanderhoeven)
+ - Don't let the floppy controller claim IO port 3f6 as this is in use by the IDE controller.
+   (11-dec-2007, Camiel Vanderhoeven)
+ - More complete IDE implementation allows NetBSD to recognize disks. (11-dec-2007, Camiel
+   Vanderhoeven)
+ - Improved system timer logic. (10/11-dec-2007, Brian Wheeler)
+ - Translate a 64-bit PCI access into 2 32-bit accesses. (10-dec-2007, Camiel Vanderhoeven)
+ - Better error-reporting if the configuration-file is wrong. (10-dec-2007, Brian Wheeler)
+ - Simplified gui plugin code. (10-dec-2007, Camiel Vanderhoeven)
+ - Format of configuration file changed, configurator class introduced. Far more flexible
+   configurations are now allowed. (10-dec-2007, Camiel Vanderhoeven)
+ - PCI Card base device (CPCIDevice) added. (10-dec-2007, Camiel Vanderhoeven)
+ - Don't let VGA-cards claim addressess they shouldn't claim. (11-dec-2007, Camiel Vanderhoeven)
+ - Added CCirrus VGA card. Both VGA-cards now use the CVGA base class. (10-dec-2007, Camiel 
+   Vanderhoeven)
+ - Make receiving network data in a separate execution thread work on Linux. (10-dec-2007, Brian
+   Wheeler)
+ - Ali chipset device split into separate ISA, IDE and USB parts. (10-dec-2007, Camiel
+   Vanderhoeven)
+ - Added configuration file item for vga_console (set console serial). (10-dec-2007, Camiel
+   Vanderhoeven)
+ - Better exec handling for starting serial port terminals. (10-dec-2007, Brian Wheeler)
+ - Generate keyboard interrupts when needed. (07-dec-2007, Camiel Vanderhoeven)
+ - Moved sdl_init from the VGA card to the SDL GUI implementation. (07-dec-2007, Camiel
+   Vanderhoeven)
+ - Let the network card identify itself as DE-500BA. (06-dec-2007, Camiel Vanderhoeven)
+ - Corrected bug regarding make/break key settings. (06-dec-2007, Camiel Vanderhoeven)
+ - Add an abstraction layer for keyboard, mouse and video support, using the SDL gui plugin
+   developed by the Bochs project. (06-dec-2007, Camiel Vanderhoeven)
+ - Change VGA-card implementation to include most of Boch's VGA-code. (06-dec-2007, Camiel
+   Vanderhoeven, Brian Wheeler)
+ - Option to handle CPU interrupts by direct operations on the Typhoon chipset's interrupt
+   registers. (02-dec-2007, Camiel Vanderhoeven)
+ - VMS PAL replacement routines added. (02-dec-2007, Camiel Vanderhoeven)
+ - Implemented various often-used bitmask operations as inline functions. (02-dec-2007, Camiel
+   Vanderhoeven)
+ - Translation buffer class objects replaced with translation buffer arrays in the CPU object.
+   (02-dec-2007, Camiel Vanderhoeven)
+ - Keep track of when to check for interrupts and when not. (02-dec-2007, Camiel Vanderhoeven)
+ - Timing / floppy tweak for Linux/BSD guests. (02-dec-2007, Brian Wheeler)
+ - Added code-profiling support. (02-dec-2007, Camiel Vanderhoeven)
+ - Receive network data in a separate execution thread. (02-dec-2007, Camiel Vanderhoeven)
+ - Avoid misprobing of unused PCI configuration space. (02-dec-2007, Camiel Vanderhoeven)
+ - Added keyboard support using SDL library. (01-dec-2007, Brian Wheeler)
+ - Corrected system timer behavior for Linux/BSD as a guest OS. (01-dec-2007, Brian Wheeler)
+ - Added support for instruction counting and underlined lines in listings. (01-dec-2007, Brian
+   Wheeler)
+ - Use __int8, __int16 and __int32 on windows, instead of char, short, long. This makes us
+   compatible with SDL. (01-dec-2007, Camiel Vanderhoeven)
+ - Corrected some unsigned/signed issues. (01-dec-2007, Brian Wheeler)
+ - Use correct interrupt for secondary IDE controller. (01-dec-2007, Camiel Vanderhoeven)
+ - Ignore address bits 35- 42 in the physical address. (01-dec-2007, Camiel Vanderhoeven, Brian
+   Wheeler)
+ - Added support for Ctrl+C and panic. (01-dec-2007, Brian Wheeler)
+ - Added CS3Trio64 VGA-card. (01-dec-2007, Brian Wheeler)
+ - Added IDB LOADREG and LOADFPREG commands. (22-nov-2007, Brian Wheeler)
+ - Added nic0.disabled configuration option. (22-nov-2007, Brian Wheeler)
+ .
+
+\section c016 version 0.15 -> 0.16
+
+Besides a few performance improvements, the biggest new feature is network support. An emulated
+DE500BA NIC has been added.
+
+ - Use the standard pcap functions (not the extended windows ones), we want to be compatible. 
+   (17-nov-2007, Camiel Vanderhoeven)
+ - Get the adapter and DECnet address to use from the configuration file. (17-nov-2007, Camiel
+   Vanderhoeven)
+ - Check memory allocations. (17-nov-2007, Camiel Vanderhoeven)
+ - Made it possible to disable the network at compile time by defining NO_NETWORK. (17-nov-2007,
+   Camiel Vanderhoeven)
+ - Changed the MAC address into the DigitalE-range. (17-nov-2007, Camiel Vanderhoeven)
+ - Moved translation of PCI addresses to system-wide addresses to a separate function 
+   (CSystem::PCI_Phys). (16-nov-2007, Camiel Vanderhoeven)
+ - More correct behaviour for some network interface registers. (16-nov-2007,Camiel Vanderhoeven)
+ - Perfect filtering for network interface implemented using berkeley packet filter. (16-nov-2007,
+   Camiel Vanderhoeven)
+ - Made processor faster again by reducing TB size to 16 entries. (15-nov-2007, Eduardo Marcelo
+   Serrat)
+ - Rewrite network code to use libpcap/winpcap. Allows other protocols than TCP/IP, and gives
+   better portability. (15-nov-2007,Camiel Vanderhoeven)
+ - Include proper files for network support. (15-nov-2007,Camiel Vanderhoeven)
+ - Use typedefs for type definitions rather than #define's. (15-nov-2007, Camiel Vanderhoeven)
+ - Network card (CDEC21143) added. Based upon the GXEmul implementation. (14-nov-2007, Anders
+   Gavare, Camiel Vanderhoeven)
+ - Implemented inet_aton for architectures that lack it. (14-nov-2007, Camiel Vanderhoeven)
+ - Added BSD-style typedef definitions. (14-nov-2007, Camiel Vanderhoeven)
+ - Bug-fix in CALL_PAL RSCC. (14-nov-2007, Camiel Vanderhoeven)
+ - Implemented most simple PALcode routines in C++. (14-nov-2007, Camiel Vanderhoeven)
+ - Fix Software Interrupt behaviour (use correct bitmasks). (12-nov-2007, Camiel Vanderhoeven)
+ - Made a start with implementing PALcode routines in C++. (12-nov-2007, Camiel Vanderhoeven)
+ - Corrected IEEE conversion problem; made really sure no endless loops can occur in any of the
+   host2xxx conversions. (10-nov-2007, Camiel Vanderhoeven)
+ - In the IDB, f12_f3 operations show fxx as registers instead of rxx. (10-nov-2007, Camiel
+   Vanderhoeven)
+ - Added menu option to save a state file to the serial port BREAK menu. (10-nov-2007, Camiel
+   Vanderhoeven)
+ - Drop LF when received on serial port; OpenVMS expects to receive a CR only on its console. This
+   allows entering the password during the OpenVMS 8.3 installation procedure. (09-nov-2007,
+   Camiel Vanderhoeven)
+ .
+
+\section c015 version 0.14 -> 0.15
+
+Version 0.15 corrects a few small bugs, adds instruction set completeness, true 32-bit floating
+point support, and increased speed.
+
+ - Added last missing CPU instructions (ITOFS, ITOFF). (08-nov-2007, Camiel Vanderhoeven)
+ - Restructured floating point conversion routines. There now is a real difference between 32-bit
+   and 64-bit floating point operations. (08-nov-2007, Camiel Vanderhoeven)
+ - Fixed IEEE conversion problem to avoid endless loop. (07-nov-2007, Camiel Vanderhoeven)
+ - Performance improvements to ICACHE: last result is kept; cache lines are larger (512 DWORDS in
+   stead of 16 DWORDS), cache size is configurable (both number of cache lines and size of each
+   cache line), memcpy is used to move memory into the ICACHE. CAVEAT: ICACHE can only be filled
+   from memory (not from I/O). (06-nov-2007, Camiel Vanderhoeven)
+ - Added integer /V instructions (without actual overflow detection support). (02-nov-2007, Camiel
+   Vanderhoeven)
+ - Added missing floating point instructions. (02-nov-2007, Camiel Vanderhoeven)
+ - Remember the last found translation buffer entry to improve speed. (02-nov-2007, Camiel
+   Vanderhoeven)
+ .
+
+\section c014 version 0.13 -> 0.14
+
+First boot version. This version is capable of booting OpenVMS 7.3-1 in conversational bootstrap
+mode.
+
+ - Fixed address translation sign extension. (31-oct-2007, Eduardo Marcelo Serrat)
+ - Disable memory access checks for now. (31-oct-2007, Eduardo Marcelo Serrat)
+ - Fixed floating point conversion routines. (31-oct-2007, Eduardo Marcelo Serrat)
+ - Added CVTDG, CVTGD, CVTGF, MULG instructions. (31-oct-2007, Eduardo Marcelo Serrat)
+ - EXC_SUM contained the wrong register (3 in stead of 1) on a DTBM exception. (31-oct-2007,
+   Eduardo Marcelo Serrat)
+ - Disable SRM replacement routines. (31-oct-2007, Eduardo Marcelo Serrat)
+ - Corrected IDE interface revision level. (31-oct-2007, Eduardo Marcelo Serrat)
+ - IPR 0x2d identified as M_FIX (Mbox fixed behaviour). (30-oct-2007, Camiel Vanderhoeven)
+ - On a big-endian system, the LBA address for a read or write action was byte-swapped. Fixed
+   this. (18-apr-2007, Camiel Vanderhoeven)
+ - Faster lockstep mechanism (send info 50 cpu cycles at a time). (18-apr-2007, Camiel
+   Vanderhoeven)
+ - Decompressed ROM image is now identical between big- and small-endian platforms (put endian_64
+   around PALbase and PC). (18-apr-2007, Camiel Vanderhoeven)
+ - Give ASM bit a value (true) for PALmode Icache entries. (17-apr-2007, Camiel Vanderhoeven)
+ - Allow a telnet client program to be in a directory containing spaces on Windows 
+   ("c:\program files\putty\putty.exe"). (17-apr-2007, Camiel Vanderhoeven)
+ - PCI reset support added. (16-apr-2007, Camiel Vanderhoeven)
+ - Remove old address range if a new one is registered (same device/same index). (16-apr-2007,
+   Camiel Vanderhoeven)
+ - Allow configuration strings with spaces in them. (16-apr-2007, Camiel Vanderhoeven)
+ - Never start a telnet client when running as lockstep slave, because we want to receive a
+   connection from the master instead. (16-apr-2007, Camiel Vanderhoeven)
+ - Added possibility to start a Telnet client automatically. (16-apr-2007, Camiel Vanderhoeven)
+ .
+
+\section c013 version 0.12 -> 0.13
+
+
+ - Save more information in state file (11-apr-2007, Camiel Vanderhoeven)
+ - Fixed bug in TRC_DEV in SRM_READ_IDE_DISK (11-apr-2007, Camiel Vanderhoeven)
+ - Explicitly convert integers to double for calls to log/pow in floating-point conversion
+   routines. (11-apr-2007, Camiel Vanderhoeven)
+ - Replaced CSystem::LoadROM and CSystem::SelectROM() calls with a single CSystem::LoadROM call.
+   (10-apr-2007, Camiel Vanderhoeven)
+ - Removed obsolete ROM-handling code. (10-apr-2007, Camiel Vanderhoeven)
+ - Extended ROM-handling code to favor loading decompressed ROM code over loading compressed code,
+   and to save decompressed ROM code during the first time the emulator is run. (10-apr-2007, 
+   Camiel Vanderhoeven)
+ - New mechanism for SRM replacements. Where these need to be executed, CSystem::LoadROM puts a 
+   special opcode (a CALL_PAL instruction with an otherwise illegal operand of 0x01234xx) in
+   memory. CAlphaCPU::DoClock recognizes these opcodes and performs the SRM action. Fixed address
+   translation sign extension. (10-apr-2007, Camiel Vanderhoeven)
+ - Added PCB to job context recognition in IDB tracing. (07-apr-2007, Camiel Vanderhoeven)
+ - Fixed CAlphaCPU::get_prbr. The virtual address was returned instead of the physical one! 
+   (05-apr-2007, Camiel Vanderhoeven)
+ - Fixed wrong IDE configuration mask (address ranges masked were too short, leading to 
+   overlapping memory regions). (05-apr-2007, Camiel Vanderhoeven)
+ - Reduced number of page-table entries back to 128. (01-apr-2007, Camiel Vanderhoeven)
+ - InvalidateSingle invalidates all matching translation buffer entries, if more than one match.
+   (01-apr-2007, Camiel Vanderhoeven)
+ - Define NO_INTELLIGENT_TB by default, because some bug causes the translation buffer to return
+   bogus translations for IDE addresses to the DQDRIVER. (31-mar-2007, Camiel Vanderhoeven)
+ .
+
+\section c012 version 0.11 -> 0.12
+
+ - Added AST to the list of conditions that cause the processor to go to the interrupt PAL vector
+   (680). (29-mar-2007, Camiel Vanderhoeven)
+ - When DEBUG_PIC is defined, generate more debugging messages. (27-mar-2007, Camiel Vanderhoeven)
+ - When an interrupt originates from the cascaded interrupt controller, the interrupt vector from
+   the cascaded controller is returned. (27-mar-2007, Camiel Vanderhoeven)
+ -	When interrupts are ended on the cascaded controller, and no interrupts are left on that
+    controller, the cascade interrupt (2) on the primary controller is ended as well. I'M NOT 
+    COMPLETELY SURE IF THIS IS CORRECT, but what goes on in OpenVMS seems to imply this. 
+    (27-mar-2007, Camiel Vanderhoeven)
+ - When the system state is saved to a vms file, and then restored, the ide_status may be 0xb9,
+   this bug has not been found yet, but as a workaround, we detect the value 0xb9, and replace it
+   with 0x40. (27-mar-2007, Camiel Vanderhoeven)
+ - Changed the values for cylinders/heads/sectors on the IDE identify command, because it looks
+   like OpenVMS' DQDRIVER doesn't like it if the number of sectors is greater than 63. 
+   (27-mar-2007, Camiel Vanderhoeven)
+ - All IDE commands generate an interrupt upon completion. (27-mar-2007, Camiel Vanderhoeven)
+ - IDE command SET TRANSLATION (0x91) is recognized, but has no effect. This is allright, as long
+   as OpenVMS NEVER DOES CHS-mode access to	the disk. (27-mar-2007, Camiel Vanderhoeven)
+ - Add possibility to disable "smart" Translation Buffers by defining NO_INTELLIGENT_TB.
+   (27-mar-2007, Camiel Vanderhoeven)
+ - Specific-EOI's (end-of-interrupt) now only end the interrupt they are meant for. (26-mar-2007,
+   Camiel Vanderhoeven)
+ - When DEBUG_PIC is defined, debugging messages for the interrupt controllers are output to the
+   console, same with DEBUG_IDE and the IDE controller. (26-mar-2007, Camiel Vanderhoeven)
+ - If IDE registers for a non-existing drive are read, 0xff is returned. (26-mar-2007, Camiel
+   Vanderhoeven)
+ - Generate an interrupt when a sector is read or written from a disk. (26-mar-2007, Camiel
+   Vanderhoeven)
+ - Possibility to disable SRM-code replacements with the defines SRM_NO_IDE, SRM_NO_SRL, and
+   SRM_NO_SPEEDUPS. (26-mar-2007, Camiel Vanderhoeven)
+ - Possibility to send SRM-code replacement debugging messages to the console, with the defines
+   DEBUG_SRM_IDE and DEBUG_SRM_SRL. (26-mar-2007, Camiel Vanderhoeven)
+ - Added software-interrupts to the list of conditions that can cause the processor to go to the
+   interrupt PAL vector (680). (26-mar-2007, Camiel Vanderhoeven)
+ - Show references to unknown memory regions when DEBUG_UNKMEM is defined. (26-mar-2007, Camiel
+   Vanderhoeven)
+ .
+
+\section c011 version 0.09 -> 0.11
+
+ - Bugfix in CTLZ and CTTZ instructions. Fixes the INCON_SCHED bugcheck (bug # 1680064). 
+   (18-mar-2007, Camiel Vanderhoeven)
+ - Removed pointles comparison (v_prbr > 0). (18-mar-2007, Camiel Vanderhoeven)
+ - Debugger translation from virtual to physical address moved to an inline function (code to do
+   this was duplicated many times...). (14-mar-2007, Camiel Vanderhoeven)
+ - Do not perform address translations when we are listing. (14-mar-2007, Camiel Vanderhoeven)
+ - Added CTraceEngine::list_all method. (14-mar-2007, Camiel Vanderhoeven)
+ - Bugfixes in debugging macro's. (14-mar-2007, Camiel Vanderhoeven)
+ - Basic floating point support added. (13-mar-2007, Camiel Vanderhoeven)
+ - Added support for TranslationBuffer debugging in IDB. (12-mar-2007, Camiel Vanderhoeven)
+ - Added possibility to retrieve physical address of current instruction. (12-mar-2007, Camiel
+   Vanderhoeven)
+ - Added member function CAlphaCPU::get_pal_base. (12-mar-2007, Camiel Vanderhoeven)
+ - When an exception occurs, debugging information for the previous instruction is no longer lost.
+   (12-mar-2007, Camiel Vanderhoeven)
+ - Made various printf-statements 64-bit safe in a neater way. (Use printf("%" LL "x",value)
+   instead of printf("%x",(u64)value)). (12-mar-2007, Camiel Vanderhoeven)
+ - Added support for "smart" Translation Buffers. (12-mar-2007, Camiel Vanderhoeven)
+ - Set values for EXC_SUM and MM_STAT on various exceptions. (12-mar-2007, Camiel Vanderhoeven)
+ - In the listing-process, addresses were executed twice. (09-mar-2007, Camiel Vanderhoeven)
+ - Try to translate a virtual PRBR value to a physical one in CAlphaCPU::get_prbr. (09-mar-2007,
+   Camiel Vanderhoeven)
+ - endian.h renamed to es40_endian.h. (08-mar-2007, Brian Wheeler)
+ - When tracing, try to convert virtual addresses to physical ones	through the translation
+   buffers. (08-mar-2007, Camiel Vanderhoeven)
+ - CAlphaCPU::va_form now takes a boolean argument bIBOX to determine which ASN and VPTB to use.
+   (08-mar-2007, Camiel Vanderhoeven)
+ - LDL and LDQ where the destination is R31 do not cause exceptions. (08-mar-2007, Camiel
+   Vanderhoeven)
+ - When doing a double translationbuffer lookup, do it manually. (08-mar-2007, Camiel
+   Vanderhoeven)
+ - When no entry is found, try to look it up in the page table ourselves. (08-mar-2007, Camiel
+   Vanderhoeven)
+ - Inline translationbuffer functions turned into normal functions, and moved to 
+   TranslationBuffer.cpp. (08-mar-2007, Camiel Vanderhoeven)
+ - TranslationBuffer functions get their asn information from CAlphaCPU, rather than getting the
+   ASN number as an argument. (08-mar-2007, Camiel Vanderhoeven)
+ .
+
+\section c009 version 0.08 -> 0.09
+
+ - Properly handle endianess on OpenVMS. (07-mar-2007, Camiel Vanderhoeven)
+ - Limit write_printable_s to 100 characters. (07-mar-2007, Camiel Vanderhoeven)
+ - When tracing to an unknown (not in CSV file) function, treat all arguments as if they were
+   strings. (07-mar-2007, Camiel Vanderhoeven)
+ - When displaying string arguments, try to translate a virtual address to a physical one through
+   the translation buffer. (07-mar-2007, Camiel Vanderhoeven)
+ - Fixed error in hiding functions (tracing). (07-mar-2007, Camiel Vanderhoeven)
+ - Bugfix in INSxH and EXTxH. The Wrong Thing(tm) was done when V_2 = 0. Fixes bugs # 1667015,
+   1667018, 1674311, 1676079, 1676081 and 1676093. (07-mar-2007, Camiel Vanderhoeven)
+ - HACK to stop APB.EXE from crashing when passing bootflags. (07-mar-2007, Camiel Vanderhoeven)
+ - Added CAlphaCPU::get_tb, CAlphaCPU::get_asn and CAlphaCPU::get_spe functions. (07-mar-2007,
+   Camiel Vanderhoeven)
+ - Put 0x2d in HW_MTPR to get rid of error messages about this unknown IPR. WE STILL NEED TO FIND
+   OUT WHAT THIS REGISTER DOES. (03-mar-2007, Camiel Vanderhoeven)
+ - Wrote code to be executed in stead of SRM console code for writing to the serial port, and
+   reading from IDE disks. Mechanism is based on recognition of the PC value. Should be replaced
+   with a better mechanism in the future. (03-mar-2007, Camiel Vanderhoeven)
+ - Accesses to IDE-configuration space and data buffers are byte-swapped on a big-endian
+   architecture. This is done through the endian_xxx macro's. (SPARC-port) (01-mar-2007, Camiel
+   Vanderhoeven)
+ - All $-signs in variable names are replaced with underscores. (SPARC-port) (01-mar-2007, Camiel
+   Vanderhoeven)
+ - Some functions now get a const char * argument i.s.o. char * to avoid compiler warnings. 
+   (SPARC-port) (01-mar-2007, Camiel Vanderhoeven)
+ - If ALIGN_MEM_ACCESS is defined, memory accesses are checked for natural alignment. If access is
+   not naturally aligned, it is performed one byte at a time. (SPARC-port) (01-mar-2007, Camiel
+   Vanderhoeven)
+ - Accesses to main-memory are byte-swapped on a big-endian architecture. This is done through the
+   endian_xx macro's, that differ according to the endianness of the architecture. (SPARC-port) 
+   (01-mar-2007, Camiel Vanderhoeven)
+ .
+
+\section c008 version 0.07 -> 0.08
+
+ - Lockstep mechanism added. (28-feb-2007, Camiel Vanderhoeven)
+ - Debugging now writes to the char* debug_string, rather than using printf directly. This allows
+   us to do other things with debugger output. (lockstep-comparison, for instance). (28-feb-2007,
+   Camiel Vanderhoeven)
+ - Add support for OpenVMS as a host OS. (27-feb-2007, Camiel Vanderhoeven)
+ - E_FAULT returned from translation buffer now causes DFAULT exception. (22-feb-2007, Camiel
+   Vanderhoeven)
+ - Bug-fix for MTPR and MFPR instructions (these instructions use different registers).
+   (22-feb-2007, Camiel Vanderhoeven)
+ - Made a couple of printf's multi-platform-safe. (22-feb-2007, Camiel Vanderhoeven)
+ - Add the the ASM bit to the instruction cache. (22-feb-2007, Camiel Vanderhoeven)
+ - CTranslationBuffer::convert_address now also may return E_FAULT when FOR or FOW is set in the
+   PTE. (22-feb-2007, Camiel Vanderhoeven)
+ - Allow user to terminate IDB execution from the serial port. (21-feb-2007, Camiel Vanderhoeven)
+ - Use small menu to determine what to do when a <BREAK> is received. (20-feb-2007, Camiel
+   Vanderhoeven)
+ - Write sectors to disk when the IDE WRITE command (0x30) is executed. (20-feb-2007, Camiel
+   Vanderhoeven)
+ - Information about IDE disks is now kept in the ide_info structure. (20-feb-2007, Brian Wheeler)
+ - Fixed a compiler-dependent bug (possible >> or <<by 64) in EXTxH, INSxH and MSKxH SRA opcodes.
+   (19-feb-2007, Camiel Vanderhoeven)
+ - Added HASHING and DUMPREGS commands to the IDB. (18-feb-2007, Camiel Vanderhoeven)
+ - Split CPU instructions into different files. (18-feb-2007, Camiel Vanderhoeven)
+ - Introduced POST_xxx and PRE_xxx macro's. When debugging, these are included from the OP macro
+   in AlphaCPU.cpp. (18-feb-2007, Camiel Vanderhoeven)
+ - Keep track of the cycle-counter in single-step mode (using the iSSCycles variable. 
+   (18-feb-2007, Camiel Vanderhoeven)
+ - Directly use the winsock functions from CSerial, don't use the CTelnet class any more. Windows
+   and Linux code are more alike now. (16-feb-2007, Camiel Vanderhoeven)
+ .
+
+\section c007 version 0.06 -> 0.07
+
+ - No longer load CSV files, this can be done with the LOAD CSV command in the Interactive 
+   De-Bugger. (16-feb-2007, Camiel Vanderhoeven)
+ - Removed most of the code from main. The main function no longer controls every clocktick, but
+   rather transfers control directly to CSystem::Run, or to the Interactive Debugger.
+   (16-feb-2007, Camiel Vanderhoeven)
+ - In the IDB-version, the name of a script to execute can be specified on the command line
+   (es40_idb @script). (16-feb-2007, Camiel Vanderhoeven)
+ - Added the Interactive Debugger (IDB). (16-feb-2007, Camiel Vanderhoeven)
+ - Macro's that end CAlphaCPU::DoClock() now return 0. (16-feb-2007, Camiel Vanderhoeven)
+ - Made a couple of printf's multi-platform-safe. (16-feb-2007, Camiel Vanderhoeven)
+ - Added CAlphaCPU::listing. (16-feb-2007, Camiel Vanderhoeven)
+ - Provide slow and fast clocks for devices. Typical fast-clocked devices are the CPU(s); most
+   other devices that need a clock should probably be slow clock devices. (16-feb-2007, Camiel
+   Vanderhoeven)
+ - DoClock was replaced with CSystem::Run, which runs until one of the connected devices returns
+   something other than 0; and CSystem::SingleStep. (16-feb-2007, Camiel Vanderhoeven)
+ - The define DISASM_START can be set to the number of processor cycles after which the
+   disassembly will start. (13-feb-2007, Camiel Vanderhoeven)
+ - The define DO_SETPC can be set to the address of the first instruction to be executed.
+   (13-feb-2007, Camiel Vanderhoeven)
+ - Different algorithm used for UMULH (previous algorithm suffered from portability issues).
+   (13-feb-2007, Brian Wheeler)
+ - Corrected some typo's in printf statements. (13-feb-2007, Brian Wheeler)
+ - Bugfix in the UMULH instruction. (13-feb-2007, Camiel Vanderhoeven)
+ - Bugfix in the HW_MTPR VA_CTL instruction. Now updates va_ctl_va_mode instead of i_ctl_va_mode.
+   (13-feb-2007, Camiel Vanderhoeven)
+ - Moved debugging macro's to cpu_debug.h. (12-feb-2007, Camiel Vanderhoeven)
+ - Cleaned up SEXT and REG macro's (a lot neater now). (12-feb-2007, Camiel Vanderhoeven)
+ - Moved CAlphaCPU::get_r and CAlphaCPU::get_prbr to AlphaCPU.h as inline functions. (12-feb-2007,
+   Camiel Vanderhoeven)
+ - Use SEXT macro in a some places where exotic constructions were used previously. (12-feb-2007,
+   Camiel Vanderhoeven)
+ - Added X64_BYTE, X64_WORD, X64_LONG and X64_QUAD, and used these instead of the corresponding
+   values. (12-feb-2007, Camiel Vanderhoeven)
+ - Added ier to the variables that are saved to the state file. (12-feb-2007, Camiel Vanderhoeven)
+ - Enable eating of first characters received on serial ports (needed for now for WINDOWS).
+   (09-feb-2007, Camiel Vanderhoeven)
+ - If DO_DISASM is defined, disassembly will be output. (09-feb-2007, Camiel Vanderhoeven)
+ - Only open an IDE disk image, if there is a filename. (09-feb-2007, Camiel Vanderhoeven)
+ - Moved debugging flags (booleans) to CSystem.cpp. (09-feb-2007, Camiel Vanderhoeven)
+ - Removed loggin of last_write_loc and last_write_val. (09-feb-2007, Camiel Vanderhoeven)
+ - Disable eating of first characters received on serial ports. Treat Telnet commands properly for
+   Linux. (07-feb-2007, Brian Wheeler)
+ - Debugging functions are enabled only when compiling with IDB defined (Interactive Debugger, a 
+   future feature). (07-feb-2007, Camiel Vanderhoeven)
+ - Configuration file may be specified on the command line. (07-feb-2007, Brian Wheeler)
+ - Load disk images according to the configuration file. (07-feb-2007, Brian Wheeler)
+ - Remove FindConfig function, and load configuration file from the CSystem::CSystem constructor.
+   (07-feb-2007, Brian Wheeler)
+ - CTraceEngine is no longer instantiated as a member of CSystem. (07-feb-2007, Camiel
+   Vanderhoeven)
+ - Removed a lot of pointless IDE messages. (07-feb-2007, Camiel Vanderhoeven)
+ - Made various dubugging-related statements dependent on the definition of IDB (interactive
+   debugger). (07-feb-2007, Camiel Vanderhoeven)
+ - RUN_LT can be defined to provide a breakpoint (end if pc < defined value). (03-feb-2007, Camiel
+   Vanderhoeven)
+ - Restructure Linux/Windows CSerial code mixing to make more sense. (03-feb-2007, Camiel
+   Vanderhoeven)
+ - Eat first incoming characters on serial ports (so we don't burden the SRM with weird incoming
+   characters. (03-feb-2007, Camiel Vanderhoeven)
+ - No longer start PuTTy. We might just want to do something wild like connecting from a different
+   machine! (03-feb-2007, Camiel Vanderhoeven)
+ - Support for 4 IDE disks. (03-feb-2007, Brian Wheeler)
+ - Fixed error in trace_dev. String is no longer interpreted by printf. (03-feb-2007, Camiel
+   Vanderhoeven)
+ - Inline function printable moved to StdAfx.h. (03-feb-2007, Camiel Vanderhoeven)
+ - Add definition of _strdup for Linux' benefit. (03-feb-2007, Brian Wheeler)
+ - Support for execution speed timing on Linux. (03-feb-2007, Brian Wheeler)
+ - Removed last conditional for supporting another system than an ES40 (#ifdef DS15). 
+   (03-feb-2007, Camiel Vanderhoeven)
+ - FindConfig() now returns the default value rather than crashing when none of the standard
+   configuration files can be found. (03-feb-2007, Camiel Vanderhoeven)
+ - Portability of 64-bit constants (03-feb-2007, Brian Wheeler)
+ - Added possibility to load a configuration file. (03-feb-2007, Brian Wheeler)
+ - Add Linux support to CSerial. (03-feb-2007, Brian Wheeler)
+ - Scanf and printf statements made compatible with Linux/GCC/glibc. (03-feb-2007, Brian Wheeler)
+ - Includes are now case-correct (necessary on Linux). (03-feb-2007, Brian Wheeler)
+ .
+*/
