@@ -35,6 +35,7 @@
 #      File Created.
 #
 ################################################################################
-
+AUTOMAKE_OPTIONS = subdir-objects
 EXTRA_DIST = reconf configure
 SUBDIRS = m4 src doc
+ACLOCAL_AMFLAGS = -I m4
