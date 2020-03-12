@@ -405,7 +405,7 @@ std::string CNumberFormatter::format(const void* ptr)
 {
 	char buffer[24];
 #if defined(POCO_PTR_IS_64_BIT)
-	std::sprintf(buffer, "%016"I64_FMT"X", (UIntPtr) ptr);
+	std::sprintf(buffer, "%016" I64_FMT "X", (UIntPtr) ptr);
 #else
 	std::sprintf(buffer, "%08lX", (UIntPtr) ptr);
 #endif

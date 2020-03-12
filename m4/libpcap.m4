@@ -90,8 +90,8 @@ AC_DEFUN([AM_PATH_PCAP],
 dnl Get the cflags and libraries for libpcap
 dnl
 
-  ES_PCAP_LIB_WHERE(/usr/ng/lib /usr/lib /usr/local/lib)
-  ES_PCAP_INC_WHERE(/usr/ng/include /usr/include /usr/local/include)
+  ES_PCAP_LIB_WHERE(/usr/ng/lib /usr/lib /usr/local/lib /opt/local/lib)
+  ES_PCAP_INC_WHERE(/usr/ng/include /usr/include /usr/local/include /opt/local/include)
 
   AC_MSG_CHECKING(whether pcap is available)
 
