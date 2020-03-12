@@ -707,7 +707,7 @@ u32 CCirrus::rom_read(u32 address, int dsize)
   }
   else
   {
-    printf("cirrus: (BAD) rom read: %"LL "x, %d, %"LL "x\n", address, dsize,
+    printf("cirrus: (BAD) rom read: %" LL "x, %d, %" LL "x\n", address, dsize,
            data);
   }
 

@@ -314,7 +314,7 @@ u64 CPCIDevice::ReadMem(int index, u64 address, int dsize)
   if(dsize != 8 && dsize != 16 && dsize != 32)
   {
     FAILURE_5(InvalidArgument,
-              "ReadMem: %s(%s) Unsupported dsize %d. (%d, %"LL "x)\n",
+              "ReadMem: %s(%s) Unsupported dsize %d. (%d, %" LL "x)\n",
               myCfg->get_myName(), myCfg->get_myValue(), dsize, index, address);
   }
 
@@ -380,7 +380,7 @@ void CPCIDevice::WriteMem(int index, u64 address, int dsize, u64 data)
   if(dsize != 8 && dsize != 16 && dsize != 32)
   {
     FAILURE_6(InvalidArgument,
-              "WriteMem: %s(%s) Unsupported dsize %d. (%d,%"LL "x,%"LL "x)\n",
+              "WriteMem: %s(%s) Unsupported dsize %d. (%d,%" LL "x,%" LL "x)\n",
               myCfg->get_myName(), myCfg->get_myValue(), dsize, index, address,
               data);
   }

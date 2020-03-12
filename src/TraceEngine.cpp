@@ -537,8 +537,8 @@ void CTraceEngine::add_function(u64 address, const char*  fn_name, const char*  
                                 bool step_over)
 {
   asFunctions[iNumFunctions].address = (u32) address &~3;
-  asFunctions[iNumFunctions].fn_name = _strdup(fn_name);
-  asFunctions[iNumFunctions].fn_arglist = _strdup(fn_arglist);
+  asFunctions[iNumFunctions].fn_name = strdup(fn_name);
+  asFunctions[iNumFunctions].fn_arglist = strdup(fn_arglist);
   asFunctions[iNumFunctions].step_over = step_over;
   iNumFunctions++;
 }
