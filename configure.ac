@@ -54,8 +54,9 @@ AC_PROG_CC
 
 # Checks for libraries.
 
-AC_SEARCH_LIBS([sqrt], [m])
-
+AC_SEARCH_LIBS([sqrt], [m] )
+AC_SEARCH_LIBS(socket,socket)
+AC_SEARCH_LIBS(inet_ntoa,xnet)
 SDL_VERSION=1.2.0
 AM_PATH_SDL($SDL_VERSION,
   CXXFLAGS="$CXXFLAGS $SDL_CFLAGS -DHAVE_SDL"
